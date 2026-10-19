@@ -1,5 +1,6 @@
 package Screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,8 +41,8 @@ fun InicioScreen(modifier: Modifier,numero: Int,miclick:()-> Unit){
 @Composable
 fun inicioscreenpreview(){
     MutacionesTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            inicioScreen(modifier= Modifier.padding(innerPadding))
+        var x by rememberSaveable {mutableStateOf(0) }
+
+        InicioScreen(modifier= Modifier.fillMaxSize().background(Color.White),x,{x=x+1} )
         }
     }
-}
