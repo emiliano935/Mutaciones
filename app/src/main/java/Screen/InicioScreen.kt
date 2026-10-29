@@ -1,5 +1,7 @@
 package Screen
 
+import Android.componentes.micard
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +24,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun  InicioScreen(modifier: Modifier) {
     Column(modifier = Modifier) {
-        var x by rememberSaveable { mutableStateOf("añadir color") }
+        var x by rememberSaveable { mutableStateOf("") }
         val listaElementos = rememberSaveable { mutableStateListOf<String>() }
 
         Column(
@@ -41,7 +43,7 @@ fun  InicioScreen(modifier: Modifier) {
                     listaElementos.add(x)
                     x = ""
                 }
-            }) { Text("Agregar") }
+            }) { Text("Agregar color") }
 
         }
         LazyColumn(
@@ -49,8 +51,8 @@ fun  InicioScreen(modifier: Modifier) {
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            items(listaElementos) { colors ->
-                colors(modifier = modifier, colors)
+            items(listaElementos) { nombre ->
+                micard(modifier = Modifier,nombre=nombre)
 
             }
         }
