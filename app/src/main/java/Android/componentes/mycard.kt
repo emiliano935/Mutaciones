@@ -42,7 +42,6 @@ fun micard(modifier: Modifier, nombre:String) {
                 .background(color = colorseleccionado)
         ) {
 
-            Text(nombre)
             Spacer(modifier = Modifier.padding(20.dp))
         }
     }
