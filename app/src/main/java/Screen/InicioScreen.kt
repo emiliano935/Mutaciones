@@ -1,6 +1,5 @@
 package Screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,12 +12,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -28,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mutaciones.ui.theme.MutacionesTheme
 
 @Composable
-fun InicioScreen(modifier: Modifier){
+fun InicioScreen(modifier: Modifier, clicknumero: (String) -> Unit){
     var sup by rememberSaveable{ mutableStateOf("")}
     var operador by rememberSaveable{mutableStateOf("")}
     var numero2 by rememberSaveable {mutableStateOf("")}
@@ -44,7 +40,7 @@ fun InicioScreen(modifier: Modifier){
             Button(modifier = Modifier
                 .width(90.dp)
                 .height(50.dp)
-            , onClick = {}) { Text("7")}
+            , onClick = { clicknumero("")}) { Text("7")}
             Spacer(modifier = Modifier.padding(3.dp))
             Button(modifier = Modifier
                 .width(90.dp)
@@ -70,7 +66,7 @@ fun InicioScreen(modifier: Modifier){
             Button(modifier = Modifier
                 .width(90.dp)
                 .height(50.dp)
-                , onClick = {}) { Text("4")}
+                , onClick = { clicknumero("4") }) { Text("4")}
             Spacer(modifier = Modifier.padding(3.dp))
             Button(modifier = Modifier
                 .width(90.dp)
@@ -159,6 +155,6 @@ fun InicioScreen(modifier: Modifier){
 @Composable
 fun InicioScreenPreview(){
     MutacionesTheme{
-        InicioScreen(modifier=Modifier.fillMaxSize())
+        InicioScreen(modifier=Modifier.fillMaxSize(),)
     }
 }
