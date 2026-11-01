@@ -29,10 +29,13 @@ import com.example.mutaciones.ui.theme.MutacionesTheme
 
 @Composable
 fun InicioScreen(modifier: Modifier){
-    var sup by rememberSaveable{ mutableStateOf("") }
+    var sup by rememberSaveable{ mutableStateOf("")}
+    var operador by rememberSaveable{mutableStateOf("")}
+    var numero2 by rememberSaveable {mutableStateOf("")}
     Column(modifier =modifier.fillMaxSize()){
         TextField(
-            value = sup ,
+            value = sup,
+            readOnly = true,
             onValueChange = {dato -> sup=dato},
             modifier = Modifier.fillMaxWidth(),
             placeholder ={Text("0")})
@@ -103,12 +106,12 @@ fun InicioScreen(modifier: Modifier){
             Button(modifier = Modifier
                 .width(90.dp)
                 .height(50.dp)
-                , onClick = {}) { Text("4")}
+                , onClick = {}) { Text("3")}
             Spacer(modifier = Modifier.padding(3.dp))
             Button(modifier = Modifier
                 .width(90.dp)
                 .height(50.dp)
-                ,colors = ButtonColors(disabledContentColor =Color.Green ,
+                ,colors = ButtonColors(disabledContentColor =Color.Green,
                     contentColor = Color.Black,
                     containerColor = Color.Green,
                     disabledContainerColor = Color.Green)
@@ -124,7 +127,7 @@ fun InicioScreen(modifier: Modifier){
             Button(modifier = Modifier
                 .width(90.dp)
                 .height(50.dp)
-                ,colors = ButtonColors(disabledContentColor =Color.Green ,
+                ,colors = ButtonColors(disabledContentColor =Color.Green,
                     contentColor = Color.Black,
                     containerColor = Color.Green,
                     disabledContainerColor = Color.Green)
