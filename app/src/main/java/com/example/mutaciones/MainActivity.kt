@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MutacionesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    AforoScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
