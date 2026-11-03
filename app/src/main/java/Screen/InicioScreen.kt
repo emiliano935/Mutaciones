@@ -1,6 +1,5 @@
 package Screen
 
-import android.R
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -36,9 +35,24 @@ import com.example.mutaciones.ui.theme.MutacionesTheme
 
 @Composable
 fun AforoScreen(modifier: Modifier){
-    var actuales by rememberSaveable{ mutableStateOf(33) }
+    var actuales by rememberSaveable{ mutableStateOf(0)}
     var visitasdia by rememberSaveable {mutableStateOf(0)}
-    //val porcentaje = actuales / AFORO_MAX.toFloat()
+    val capacidadmax=50
+    val porcentaje = actuales /capacidadmax.toFloat()
+    val porciento=(porcentaje*100).toInt()
+
+    val tarjeta = when {
+        porciento >= 100 -> Color(0xFFFFEBEE)
+        porciento >= 70  -> Color(0xFFFFFD_E7)
+        else -> Color(0xFFE8F5E9)
+    }
+
+    val texto = when {
+        porciento >= 100 -> Color(0xFFC62828)
+        porciento >= 70  -> Color(0xFFF57F17)
+        else                 -> Color(0xFF1B5E20)
+    }
+
 
     Column(modifier = Modifier) {
         Spacer(modifier = Modifier.padding(3.dp))
@@ -49,22 +63,27 @@ fun AforoScreen(modifier: Modifier){
         Spacer(modifier = Modifier.padding(2.dp))
         Box(modifier = Modifier
             .fillMaxWidth()
+            .background(color = tarjeta)
             .padding(40.dp)
             , contentAlignment = Alignment.Center
+            ,
         ){
             Column(modifier = Modifier
                 , horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(" $actuales/50",
-                    fontSize = 80.sp )
+                Text("$actuales/$capacidadmax",
+                    fontSize = 80.sp,
+                    color = texto)
                 Text("personas en la sala")
                 Spacer(Modifier.padding(7.dp))
                 LinearProgressIndicator(modifier = Modifier
                     .height(10.dp)
                     ,progress = {actuales*0.02f}
+                    , color = texto
                 )
                 Spacer(Modifier.padding(8.dp))
-                Text(" de ocupacion",
-                    fontSize = 23.sp)
+                Text("$porciento % de ocupacion",
+                    fontSize = 23.sp
+                , color = texto)
                 Spacer(Modifier.padding(3.dp))
                 Text("Aforo disponible"
                     ,fontSize = 12.sp)
@@ -73,13 +92,18 @@ fun AforoScreen(modifier: Modifier){
         Spacer(Modifier.padding(8.dp))
         Row(modifier = Modifier) {
             Spacer(Modifier.padding(15.dp))
-            Button(onClick ={}
+            Button(onClick ={if(actuales!=0){
+                actuales--
+            } }
                 ,Modifier.height(60.dp)
                     .width(150.dp))
             {Text("- sale", fontSize = 25.sp)
             }
             Spacer(Modifier.padding(15.dp))
-            Button(onClick = {}
+            Button(onClick = {if(actuales<50){
+                actuales++
+                visitasdia++
+            } }
                 ,Modifier.height(60.dp)
                     .width(150.dp)) { Text("+ entra",
                 fontSize = 25.sp)}
@@ -149,10 +173,6 @@ fun AforoScreen(modifier: Modifier){
         }
     }
 }
-
-
-
-
 
 @Preview
 @Composable
