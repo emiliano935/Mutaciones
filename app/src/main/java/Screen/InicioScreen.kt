@@ -28,7 +28,7 @@ data class AjustesLectura(
 )
 
 @Composable
-fun LecturaScreen() {
+fun LecturaScreen(modifier: Modifier) {
     var ajustes by remember { mutableStateOf(AjustesLectura()) }
 
     Surface(
@@ -159,11 +159,4 @@ fun VistaPrevia(ajustes: AjustesLectura) {
             )
         }
     }
-}
-
-// Preview para ver la pantalla directo en Android Studio
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LecturaScreenPreview() {
-    LecturaScreen()
 }
