@@ -54,7 +54,7 @@ fun AforoScreen(modifier: Modifier){
     }
 
 
-    Column(modifier = Modifier) {
+    Column(modifier = Modifier.padding(15.dp)) {
         Spacer(modifier = Modifier.padding(3.dp))
         Text("Bibloteca Central",
             fontSize = 22.sp)
