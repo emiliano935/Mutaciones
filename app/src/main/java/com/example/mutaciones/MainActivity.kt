@@ -1,6 +1,5 @@
 package com.example.mutaciones
 
-import Screen.AjustesLectura
 import Screen.LecturaScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
