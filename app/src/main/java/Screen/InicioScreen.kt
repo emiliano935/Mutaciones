@@ -190,3 +190,4 @@ fun InicioScreenPreview() {
         LecturaScreen(modifier = Modifier.fillMaxSize(),)
     }
 }
+//
