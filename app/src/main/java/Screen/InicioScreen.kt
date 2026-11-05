@@ -13,18 +13,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@Composable fun InscripcionScreen() {
-    // ... estados ...
+@Composable fun InscripcionScreen(modifier: Modifier) {
+    var inscripciones by rememberSaveable{mutableStateOf(10) }
+    var nombre by rememberSaveable{mutableStateOf("")}
+    var correo by rememberSaveable{mutableStateOf("")}
+    var edad  by rememberSaveable{mutableStateOf("")}
+    var taller by rememberSaveable{mutableStateOf("")}
     if (inscrito) ConfirmacionScreen(nombre, correo, taller, onNueva = { /* limpiar */ })
     else InscripcionForm(/* valores + callbacks */)
 }
 
 @Composable
-fun CampoTexto(label: String, value: String,
-               onValueChange: (String) -> Unit, error: String?)
+fun CampoTexto(label: String,
+               value: String,
+               onValueChange: (String) -> Unit,
+               error: String?)
+{
+
+}
 
 @Composable
-fun ConfirmacionScreen(nombre: String, correo: String,
-                       taller: String, onNueva: () -> Unit)
+fun ConfirmacionScreen(nombre: String,
+                       correo: String,
+                       taller: String,
+                       onNueva: () -> Unit)
+{
+
+}
 
 

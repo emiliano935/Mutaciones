@@ -1,5 +1,6 @@
 package com.example.mutaciones
 import Screen.Inicio
+import Screen.InscripcionScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MutacionesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Inicio(modifier = Modifier.padding(innerPadding))
+                    InscripcionScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
