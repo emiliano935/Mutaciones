@@ -1,6 +1,5 @@
 package com.example.mutaciones
-
-import Screen.AforoScreen
+import Screen.Inicio
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,24 +20,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MutacionesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Inicio(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MutacionesTheme {
-        Greeting("Android")
     }
 }
