@@ -1,5 +1,4 @@
 package com.example.mutaciones
-import Screen.Inicio
 import Screen.InscripcionScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
