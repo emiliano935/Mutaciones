@@ -23,21 +23,25 @@ enum class Interlineado(val factor: Float) {
     COMPACTO(1.0f), NORMAL(1.3f), AMPLIO(1.6f)
 }
 
-@Composable fun LecturaScreen(modifier: Modifier){
-    var tamano by rememberSaveable{mutableStateOf(18f)}
-    var interlineado by rememberSaveable{mutableStateOf(Interlineado.NORMAL)}
-    var mododark by rememberSaveable{mutableStateOf(false)}
-    var usaSerif by rememberSaveable{mutableStateOf(false)}
-    Column(modifier = Modifier.fillMaxSize()
-        .background(Color.White)
-        .padding(vertical = 14.dp)
-        .padding(horizontal =12.dp )){
-        Text("Ajustes de lectura", fontSize =25.sp)
+@Composable
+fun LecturaScreen(modifier: Modifier) {
+    var tamano by rememberSaveable { mutableStateOf(18f) }
+    var interlineado by rememberSaveable { mutableStateOf(Interlineado.NORMAL) }
+    var mododark by rememberSaveable { mutableStateOf(false) }
+    var usaSerif by rememberSaveable { mutableStateOf(false) }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(vertical = 14.dp)
+            .padding(horizontal = 12.dp)
+    ) {
+        Text("Ajustes de lectura", fontSize = 25.sp)
         Spacer(Modifier.padding(vertical = 13.dp, horizontal = 4.dp))
         Row {
             Text("tamano de letra", fontSize = 20.sp)
             Spacer(Modifier.padding(horizontal = 85.dp))
-            Text("${tamano.toInt()} sp", fontSize = 17.sp, color =Color.Magenta )
+            Text("${tamano.toInt()} sp", fontSize = 17.sp, color = Color.Magenta)
         }
         ControlesLectura(
             tamano = tamano,
@@ -45,7 +49,7 @@ enum class Interlineado(val factor: Float) {
             interlineado = interlineado,
             onInterlineadoChange = { interlineado = it },
             modoOscuro = mododark,
-            onModoOscuroChange = {mododark = it },
+            onModoOscuroChange = { mododark = it },
             usaSerif = usaSerif,
             onUsaSerifChange = { usaSerif = it }
         )
@@ -62,21 +66,24 @@ enum class Interlineado(val factor: Float) {
 
 
 @Composable
-fun ControlesLectura(tamano: Float, onTamanoChange: (Float) -> Unit,
+fun ControlesLectura(
+    tamano: Float, onTamanoChange: (Float) -> Unit,
     interlineado: Interlineado, onInterlineadoChange: (Interlineado) -> Unit,
     modoOscuro: Boolean, onModoOscuroChange: (Boolean) -> Unit,
-    usaSerif: Boolean, onUsaSerifChange: (Boolean) -> Unit)
-{
+    usaSerif: Boolean, onUsaSerifChange: (Boolean) -> Unit
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Slider(value = tamano,
+        Slider(
+            value = tamano,
             onValueChange = onTamanoChange,
             valueRange = 14f..32f,
             colors = SliderDefaults.colors(
                 thumbColor = Color.Magenta,
                 activeTrackColor = Color.Magenta,
                 inactiveTickColor = Color.LightGray
-            ))
-        Row{
+            )
+        )
+        Row {
             Text(text = "A", fontSize = 14.sp)
             Spacer(Modifier.padding(horizontal = 170.dp))
             Text(text = "A", fontSize = 22.sp)
@@ -110,12 +117,13 @@ fun ControlesLectura(tamano: Float, onTamanoChange: (Float) -> Unit,
                     checkedThumbColor = Color.White,
                     checkedTrackColor = Color.Magenta,
                     checkedBorderColor = Color.Magenta,
-                ))
+                )
+            )
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
 
-        ) {
+            ) {
             Text(text = "Fuente")
 
             Spacer(modifier = Modifier.width(160.dp))
@@ -136,11 +144,13 @@ fun ControlesLectura(tamano: Float, onTamanoChange: (Float) -> Unit,
 
 
 @Composable
-fun VistaPrevia(texto: String,
-                tamano: Float,
-                interlineado: Interlineado,
-                modoOscuro: Boolean,
-                usaSerif: Boolean){
+fun VistaPrevia(
+    texto: String,
+    tamano: Float,
+    interlineado: Interlineado,
+    modoOscuro: Boolean,
+    usaSerif: Boolean
+) {
     Column(modifier = Modifier.fillMaxWidth())
     {
         Text(
@@ -151,8 +161,7 @@ fun VistaPrevia(texto: String,
         Spacer(modifier = Modifier.height(4.dp))
 
         // Modo oscuro
-        val colorCard = if(modoOscuro)
-        {
+        val colorCard = if (modoOscuro) {
             CardDefaults.cardColors(
                 containerColor = Color.Black,
                 contentColor = Color.White
@@ -175,19 +184,19 @@ fun VistaPrevia(texto: String,
                     text = texto,
                     fontSize = tamano.sp,
                     lineHeight = (tamano * interlineado.factor).sp,
-                    fontFamily = if (usaSerif) FontFamily.Serif else FontFamily.SansSerif)
+                    fontFamily = if (usaSerif) FontFamily.Serif else FontFamily.SansSerif
+                )
             }
         }
     }
 }
 
 
-
 @Preview
 @Composable
 fun InicioScreenPreview() {
     MutacionesTheme {
-        LecturaScreen(modifier = Modifier.fillMaxSize(),)
+        LecturaScreen(modifier = Modifier.fillMaxSize())
     }
 }
 //
