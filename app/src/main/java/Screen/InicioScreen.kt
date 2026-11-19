@@ -37,8 +37,6 @@ fun ConfirmacionScreen(
     taller: String,
     onNueva: () -> Unit
 ) {
-
-
 }
 
 @Composable
