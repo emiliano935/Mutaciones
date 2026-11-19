@@ -1,4 +1,6 @@
 package Screen
+
+import ViewModel.inscripcionviewMoldel
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,60 +11,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun Inicio(modifier: Modifier = Modifier) {
-    var nombre by remember { mutableStateOf("") }
-    var correo by remember { mutableStateOf("") }
-    var edad by remember { mutableStateOf("") }
-    var taller by remember { mutableStateOf("Fotografía") }
-    var aceptaAviso by remember { mutableStateOf(false) }
-
-    var intentoEnviar by remember { mutableStateOf(false) }
-    var inscrito by remember { mutableStateOf(false) }
-
-
-    val errorNombre = if (intentoEnviar && nombre.length < 3) "El nombre debe tener al menos 3 caracteres" else null
-    val errorCorreo = if (intentoEnviar && (!correo.contains("@") || !correo.substringAfter("@").contains("."))) "Ingresa un correo válido" else null
-
-    val edadInt = edad.toIntOrNull()
-    val errorEdad = if (intentoEnviar && (edadInt == null || edadInt !in 12..99)) "La edad debe estar entre 12 y 99" else null
-    val errorAviso = if (intentoEnviar && !aceptaAviso) "Debes aceptar el aviso de privacidad" else null
-
-
-    if (inscrito) {
+fun InicioScreen(
+    modifier: Modifier = Modifier, viewModel: inscripcionviewMoldel = viewModel()
+) {
+    val datos by viewModel.UIestado.collectAsStateWithLifecycle()
+    if (datos.inscrito) {
         ConfirmacionScreen(
-            nombre = nombre,
-            correo = correo,
-            edad = edad,
-            taller = taller,
+            nombre = datos.nombre,
+            correo = datos.correo,
+            edad = datos.edad,
+            taller = datos.taller,
             onNueva = {
-                // Limpiar campos y regresar al formulario
-                nombre = ""
-                correo = ""
-                edad = ""
-                taller = "Fotografía"
-                aceptaAviso = false
-                intentoEnviar = false
-                inscrito = false
+                viewModel::onNueva
             }
         )
     } else {
         InscripcionForm(
-            nombre = nombre, onNombreChange = { nombre = it }, errorNombre = errorNombre,
-            correo = correo, onCorreoChange = { correo = it }, errorCorreo = errorCorreo,
-            edad = edad, onEdadChange = { if (it.all { char -> char.isDigit() }) edad = it }, errorEdad = errorEdad,
-            taller = taller, onTallerChange = { taller = it },
-            aceptaAviso = aceptaAviso, onAceptaAvisoChange = { aceptaAviso = it }, errorAviso = errorAviso,
-            onSubmit = {
-                intentoEnviar = true
-                // Si no hay errores, procedemos a marcar como inscrito
-                if (errorNombre == null && errorCorreo == null && errorEdad == null && errorAviso == null) {
-                    inscrito = true
-                }
-            }
+            nombre = datos.nombre,
+            onNombreChange = viewModel::onNombreChange,
+            errorNombre = datos.errorNombre,
+            correo = datos.correo,
+            onCorreoChange = viewModel::onCorreoChange,
+            errorCorreo = datos.errorCorreo,
+            edad = datos.edad,
+            onEdadChange = viewModel::onEdadChange,
+            errorEdad = datos.errorEdad,
+            taller = datos.taller,
+            onTallerChange = viewModel::onTallerChange,
+            aceptaAviso = datos.aceptaAviso,
+            onAceptaAvisoChange = viewModel::onAceptaAvisoChange,
+            errorAviso = datos.errorAviso,
+            onSubmit = viewModel::onSubmit
         )
     }
 }
@@ -215,7 +201,10 @@ fun ConfirmacionScreen(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = Color(0xFFF3EDF7))
         ) {
-            Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(
+                modifier = Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 Text(text = "Resumen de datos:")
                 Text(text = "• Nombre: $nombre")
                 Text(text = "• Correo: $correo")
@@ -237,3 +226,13 @@ fun ConfirmacionScreen(
         }
     }
 }
+
+@Preview
+@Composable
+fun AforoScreenPreview() {
+    MutacionesTheme {
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            InicioScreen(modifier = Modifier.padding(innerPadding))
+        }
+    }
+}09
