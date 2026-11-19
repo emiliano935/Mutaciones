@@ -1,3 +1,7 @@
+package Screen
+
+import ViewModel.CarritoViewModel
+import ViewModel.Producto
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,8 +26,7 @@ import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,39 +35,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mutaciones.ui.theme.MutacionesTheme
-import kotlin.collections.listOf
 
-
-data class Producto(val nombre: String, val precio: Double)
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun CarritoScreen(modifier: Modifier) {
-    val catalogo = remember {
-        listOf(
-            Producto("tortillas 1 kg", 24.00),
-            Producto("Leche 1 L", 27.50),
-            Producto("Huevo 12 pz", 52.00),
-            Producto("tortillas 1 kg", 38.00)
-        )
-    }
-    val cantidades = remember { mutableStateListOf(0, 0, 0, 0) }
-    // derivados:
-    val totalarticulos = cantidades.sum()
-    val subtotal = catalogo.indices.sumOf { i -> catalogo[i].precio * cantidades[i] }
-    val descuento = if (subtotal >= 200.0) {
-        subtotal * 0.10
-    } else 0.0
-    val subtotalConDescuento = subtotal - descuento
-
-    val costoEnvio = when {
-        totalarticulos == 0 -> 0.0
-        subtotalConDescuento >= 150.0 -> 0.0
-        else -> 25.0
-    }
-    val totalFinal = subtotalConDescuento + costoEnvio
+fun CarritoScreen(
+    modifier: Modifier = Modifier,
+    viewModel: CarritoViewModel = viewModel()
+) {
+    val state by viewModel.UIestado.collectAsStateWithLifecycle()
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .statusBarsPadding()
             .padding(15.dp)
@@ -73,11 +56,7 @@ fun CarritoScreen(modifier: Modifier) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                "Tienda don pepe",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Text("Tienda don pepe", fontSize = 24.sp, fontWeight = FontWeight.Bold)
             Box(
                 modifier = Modifier
                     .size(36.dp)
@@ -85,7 +64,7 @@ fun CarritoScreen(modifier: Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    "$totalarticulos",
+                    "${state.totalarticulos}",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
@@ -97,58 +76,52 @@ fun CarritoScreen(modifier: Modifier) {
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            catalogo.forEachIndexed { index, producto ->
+            state.catalogo.forEachIndexed { index, producto ->
                 ProductoItem(
                     producto = producto,
-                    cantidad = cantidades[index],
-                    onCantidadChange = {nuevacantidad -> cantidades[index]= nuevacantidad }
+                    cantidad = state.cantidades[index],
+                    onCantidadChange = { nueva -> viewModel.cambiarCantidad(index, nueva) }
                 )
                 HorizontalDivider()
             }
         }
         ResumenCarrito(
-            articulos = totalarticulos,
-            subtotal = subtotal,
-            descuento = descuento,
-            envio = costoEnvio,
-            total = totalFinal
+            articulos = state.totalarticulos,
+            subtotal = state.subtotal,
+            descuento = state.descuento,
+            envio = state.costoEnvio,
+            total = state.totalFinal
         )
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        // Botones de acción inferiores
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             OutlinedButton(
-                onClick = {
-                    for (i in cantidades.indices) {
-                        cantidades[i] = 0
-                    }
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(50.dp),
-                shape = RoundedCornerShape(25.dp),
+                onClick = viewModel::vaciar,
+                modifier = Modifier.weight(1f).height(50.dp),
+                shape = RoundedCornerShape(25.dp)
             ) {
-                Text(text = "Vaciar", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                Text("Vaciar", fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
             }
 
             Button(
                 onClick = {},
-                enabled = totalarticulos > 0,
-                modifier = Modifier
-                    .weight(1.5f)
-                    .height(50.dp),
+                enabled = state.totalarticulos > 0,
+                modifier = Modifier.weight(1.5f).height(50.dp),
                 shape = RoundedCornerShape(25.dp),
-                colors = ButtonDefaults.buttonColors(containerColor =Color.Blue)
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
             ) {
-                Text(text = "Confirmar pedido", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text("Confirmar pedido", fontSize = 15.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
 }
+
+
+
 @Composable
 fun ProductoItem(
     producto: Producto,
