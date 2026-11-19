@@ -1,5 +1,7 @@
 package Screen
 
+import ViewModel.Interlineado
+import ViewModel.LecturaViewModel
 import android.R.attr.fontFamily
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,20 +19,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mutaciones.ui.theme.MutacionesTheme
 
-enum class Interlineado(val factor: Float) {
-    COMPACTO(1.0f), NORMAL(1.3f), AMPLIO(1.6f)
-}
+
 
 @Composable
-fun LecturaScreen(modifier: Modifier) {
-    var tamano by rememberSaveable { mutableStateOf(18f) }
-    var interlineado by rememberSaveable { mutableStateOf(Interlineado.NORMAL) }
-    var mododark by rememberSaveable { mutableStateOf(false) }
-    var usaSerif by rememberSaveable { mutableStateOf(false) }
+fun LecturaScreen(
+    modifier: Modifier = Modifier,
+    viewModel: LecturaViewModel = viewModel()
+) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(vertical = 14.dp)
@@ -41,25 +44,25 @@ fun LecturaScreen(modifier: Modifier) {
         Row {
             Text("tamano de letra", fontSize = 20.sp)
             Spacer(Modifier.padding(horizontal = 85.dp))
-            Text("${tamano.toInt()} sp", fontSize = 17.sp, color = Color.Magenta)
+            Text("${state.tamano.toInt()} sp", fontSize = 17.sp, color = Color.Magenta)
         }
         ControlesLectura(
-            tamano = tamano,
-            onTamanoChange = { tamano = it },
-            interlineado = interlineado,
-            onInterlineadoChange = { interlineado = it },
-            modoOscuro = mododark,
-            onModoOscuroChange = { mododark = it },
-            usaSerif = usaSerif,
-            onUsaSerifChange = { usaSerif = it }
+            tamano = state.tamano,
+            onTamanoChange = viewModel::onTamanoChange,
+            interlineado = state.interlineado,
+            onInterlineadoChange = viewModel::onInterlineadoChange,
+            modoOscuro = state.modoOscuro,
+            onModoOscuroChange = viewModel::onModoOscuroChange,
+            usaSerif = state.usaSerif,
+            onUsaSerifChange = viewModel::onUsaSerifChange
         )
         Spacer(Modifier.padding(vertical = 50.dp))
         VistaPrevia(
             texto = "Era una noche tranquila en el pueblo cuando las campanas comenzaron a sonar, y nadie supo por qué.",
-            tamano = tamano,
-            interlineado = interlineado,
-            modoOscuro = mododark,
-            usaSerif = usaSerif
+            tamano = state.tamano,
+            interlineado = state.interlineado,
+            modoOscuro = state.modoOscuro,
+            usaSerif = state.usaSerif
         )
     }
 }
