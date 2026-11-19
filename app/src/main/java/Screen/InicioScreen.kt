@@ -161,6 +161,7 @@ fun AforoScreen(
         ) { Text("cerrar dia") }
     }
 }
+//1
 
 @Preview
 @Composable
