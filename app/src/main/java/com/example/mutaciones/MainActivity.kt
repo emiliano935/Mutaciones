@@ -20,8 +20,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MutacionesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AforoScreen(modifier = Modifier.padding(innerPadding))
+                Scaffold{ Padding ->
+                    AforoScreen(modifier = Modifier.padding(Padding))
                 }
             }
         }
