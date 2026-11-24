@@ -1,6 +1,7 @@
 package com.example.mutaciones
 
-import Screen.CarritoScreen
+
+import Screen.InicioScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,7 +19,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MutacionesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CarritoScreen(modifier = Modifier.padding(innerPadding))
+                    InicioScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

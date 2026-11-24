@@ -48,4 +48,24 @@ class VM : ViewModel() {
     fun onPropinaSeleccionada(propina: Int) {
         uiState = uiState.copy(propinaSeleccionada = propina)
     }
+
+    fun onPropinaSliderValorChange(valor: Float) {
+        uiState = uiState.copy(propinaSliderValor = valor)
+    }
+
+    fun onDecrementarPersonas() {
+        if (uiState.personasCantidad > 1) {
+            uiState = uiState.copy(personasCantidad = uiState.personasCantidad - 1)
+        }
+    }
+
+    fun onIncrementarPersonas() {
+        if (uiState.personasCantidad < 20) {
+            uiState = uiState.copy(personasCantidad = uiState.personasCantidad + 1)
+        }
+    }
+
+    fun onRedondearChange(redondear: Boolean) {
+        uiState = uiState.copy(redondearPersona = redondear)
+    }
 }
