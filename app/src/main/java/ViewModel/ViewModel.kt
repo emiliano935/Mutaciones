@@ -1,59 +1,51 @@
 package ViewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.room.util.copy
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlin.math.ceil
 
-data class Producto(val nombre: String, val precio: Double)
-
-data class carritoestado(
-    val catalogo: List<Producto> = listOf(
-        Producto("Tortillas 1 kg", 24.00),
-        Producto("Leche 1 L", 27.50),
-        Producto("Huevo 12 pz", 52.00),
-        Producto("Pan 1 pz", 38.00)
-    ),
-    val cantidades: List<Int> = listOf(0, 0, 0, 0)
+data class CuentaUiState(
+    val montoInput: String = "",
+    val propinaSeleccionada: Int = 0,
+    val personasCantidad: Int = 1,
+    val redondearPersona: Boolean = false,
+    val propinaSliderValor: Float = 0.0f
 ) {
-    val totalarticulos: Int
-        get() = cantidades.sum()
+    val montoInputDouble: Double
+        get() = montoInput.toDoubleOrNull() ?: 0.0
+
+    val propinaFinal: Double
+        get() = if (propinaSeleccionada != 1) {
+            montoInputDouble * (propinaSeleccionada / 100.0)
+        } else {
+            montoInputDouble * (propinaSliderValor / 100.0)
+        }
 
     val subtotal: Double
-        get() = catalogo.indices.sumOf { i -> catalogo[i].precio * cantidades[i] }
+        get() = montoInputDouble + propinaFinal
 
-    val descuento: Double
-        get() = if (subtotal >= 200.0) subtotal * 0.10 else 0.0
+    private val totalSinRedondeo: Double
+        get() = subtotal / personasCantidad
 
-    val subtotalConDescuento: Double
-        get() = subtotal - descuento
+    val total: Double
+        get() = if (redondearPersona) ceil(totalSinRedondeo) else totalSinRedondeo
 
-    val costoEnvio: Double
-        get() = when {
-            totalarticulos == 0 -> 0.0
-            subtotalConDescuento >= 150.0 -> 0.0
-            else -> 25.0
-        }
-
-    val totalFinal: Double
-        get() = subtotalConDescuento + costoEnvio
+    val sobrante: Double
+        get() = if (redondearPersona) total - totalSinRedondeo else 0.0
 }
 
-class CarritoViewModel : ViewModel() {
-    private val  uiestado1= MutableStateFlow(carritoestado())
-    val UIestado : StateFlow<carritoestado> = uiestado1.asStateFlow()
+class VM : ViewModel() {
 
-    fun cambiarCantidad(index: Int, nuevaCantidad: Int) {
-        uiestado1.update { s ->
-            s.copy(
-                cantidades = s.cantidades.toMutableList().also { it[index] = nuevaCantidad }
-            )
-        }
+    var uiState by mutableStateOf(CuentaUiState())
+        private set
+
+    fun onMontoChange(nuevoMonto: String) {
+        uiState = uiState.copy(montoInput = nuevoMonto)
     }
 
-    fun vaciar() {
-        uiestado1.update { s -> s.copy(cantidades = s.cantidades.map { 0 }) }
+    fun onPropinaSeleccionada(propina: Int) {
+        uiState = uiState.copy(propinaSeleccionada = propina)
     }
 }
