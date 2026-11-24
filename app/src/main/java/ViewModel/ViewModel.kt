@@ -45,7 +45,7 @@ data class Inscripcioninterfazstate(
 
 class inscripcionviewMoldel : ViewModel() {
     private val UInterfaz= MutableStateFlow(Inscripcioninterfazstate())
-    val UIestado: StateFlow<Inscripcioninterfazstate> =UInterfaz.asStateFlow()
+    val UIestado: StateFlow<Inscripcioninterfazstate> = UInterfaz.asStateFlow()
 
     fun onNombreChange(valor: String) {
         UInterfaz.update { it.copy(nombre = valor) }
